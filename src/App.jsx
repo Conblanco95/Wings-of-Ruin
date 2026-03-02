@@ -130,6 +130,27 @@ const GLOBAL_STYLES = `
   ::-webkit-scrollbar-track { background: #0a0804; }
   ::-webkit-scrollbar-thumb { background: rgba(232,192,64,0.22); border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: rgba(232,192,64,0.4); }
+
+  /* ── Mobile responsiveness ── */
+  .wor-outer { padding: 1.5rem 1.25rem 5rem; }
+  .wor-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap; gap: 0.5rem; }
+  .wor-card-inner { padding: clamp(1.5rem, 4vw, 2.8rem); }
+  .wor-card-outer { margin: 4px; }
+  .wor-location { white-space: nowrap; }
+
+  @media (max-width: 600px) {
+    .wor-outer { padding: 0.75rem 0.5rem 3rem; }
+    .wor-header {
+      flex-wrap: wrap; justify-content: center; gap: 0.15rem 0.8rem;
+      text-align: center;
+    }
+    .wor-header > * { flex: none; }
+    .wor-card-inner { padding: 1rem 0.85rem; }
+    .wor-card-outer { margin: 2px; }
+    .wor-location { white-space: normal; text-align: center; }
+    .wor-corner { display: none; }
+    .wor-name-screen { padding: 1.5rem 1rem !important; }
+  }
 `;
 
 // ─── PARTICLE CANVAS ──────────────────────────────────────────────────────────
@@ -444,9 +465,9 @@ function SceneDisplay({ scene, theme, onChoice, playerName, onRestart, isLoading
         marginBottom: "1.4rem", animation: "fadeSlideUp 0.4s ease"
       }}>
         <div style={{ flex: 1, height: "1px", background: `linear-gradient(to right, transparent, ${theme.accentBorder})` }} />
-        <div style={{
+        <div className="wor-location" style={{
           fontSize: "0.58rem", letterSpacing: "0.35em", textTransform: "uppercase",
-          color: theme.accent, opacity: 0.65, whiteSpace: "nowrap",
+          color: theme.accent, opacity: 0.65,
           fontFamily: "'Cormorant Garamond', serif", fontWeight: 500,
         }}>📍 {scene.location}</div>
         <div style={{ flex: 1, height: "1px", background: `linear-gradient(to left, transparent, ${theme.accentBorder})` }} />
@@ -601,7 +622,7 @@ function NameScreen({ onStart }) {
   const theme = MOOD_THEMES.gold;
 
   return (
-    <div style={{
+    <div className="wor-name-screen" style={{
       minHeight: "100vh", display: "flex", flexDirection: "column",
       alignItems: "center", justifyContent: "center", padding: "2rem",
       background: "radial-gradient(ellipse at 50% 35%, #141008 0%, #0c0a04 50%, #080602 100%)",
@@ -919,23 +940,21 @@ function GameScreen({ playerName, onRestart }) {
         { top: 16, left: 16 }, { top: 16, right: 16 },
         { bottom: 16, left: 16 }, { bottom: 16, right: 16 },
       ].map((pos, i) => (
-        <div key={i} style={{
+        <div key={i} className="wor-corner" style={{
           position: "fixed", zIndex: 2, fontSize: "0.9rem",
           color: theme.accent, opacity: 0.3,
           transition: "color 2s ease", ...pos,
         }}>✦</div>
       ))}
 
-      <div ref={contentRef} style={{
+      <div ref={contentRef} className="wor-outer" style={{
         position: "relative", zIndex: 3,
         maxWidth: 780, margin: "0 auto",
-        padding: "1.5rem 1.25rem 5rem",
         minHeight: "100vh",
         display: "flex", flexDirection: "column",
       }}>
         {/* Header */}
-        <div style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
+        <div className="wor-header" style={{
           marginBottom: "1.5rem", paddingBottom: "0.8rem",
           borderBottom: `1px solid ${theme.accentBorder}`,
           transition: "border-color 2s ease",
@@ -975,10 +994,9 @@ function GameScreen({ playerName, onRestart }) {
           flex: 1, overflow: "hidden",
           transition: "border-color 2s ease, box-shadow 2s ease",
         }}>
-          <div style={{
+          <div className="wor-card-outer wor-card-inner" style={{
             border: `1px solid ${theme.accentSoft}`,
-            margin: "4px", borderRadius: "2px",
-            padding: "clamp(1.5rem, 4vw, 2.8rem)",
+            borderRadius: "2px",
             minHeight: 400,
             transition: "border-color 2s ease",
             background: "rgba(232,192,64,0.03)",
