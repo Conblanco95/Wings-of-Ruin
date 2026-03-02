@@ -111,13 +111,28 @@ wings-of-ruin/
 ├── .env                 ← Your API key (create this)
 ├── .env.example         ← Template
 ├── package.json
-├── server.js            ← Express API proxy
-├── vite.config.js       ← Vite + proxy config
+├── server.js            ← Express server (API proxy + static files)
+├── vite.config.js       ← Vite + dev proxy config
 ├── index.html           ← HTML shell
 └── src/
     ├── main.jsx         ← React entry point
     └── App.jsx          ← The entire game (UI + logic)
 ```
+
+---
+
+## Deploy to Railway (5 minutes)
+
+1. Push this project to a GitHub repo
+2. Go to [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub repo**
+3. Railway will auto-detect Node.js. Set these:
+   - **Build Command:** `npm install && npm run build`
+   - **Start Command:** `npm start`
+4. Add your environment variable:
+   - `ANTHROPIC_API_KEY` = `sk-ant-your-key-here`
+5. Deploy — Railway gives you a public URL to share
+
+The Express server serves both the built frontend and the API proxy from a single process, so Railway only needs one service.
 
 ---
 

@@ -1,8 +1,13 @@
 import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 
-config(); // Load .env
+config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -23,7 +28,7 @@ if (!API_KEY) {
 app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 
-// Proxy endpoint
+// API proxy endpoint
 app.post("/api/messages", async (req, res) => {
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -49,7 +54,14 @@ app.post("/api/messages", async (req, res) => {
   }
 });
 
+// Serve built frontend (production)
+const distPath = join(__dirname, "dist");
+app.use(express.static(distPath));
+app.get("*", (req, res) => {
+  res.sendFile(join(distPath, "index.html"));
+});
+
 app.listen(PORT, () => {
-  console.log(`\n⚔  Wings of Ruin API proxy running on http://localhost:${PORT}`);
-  console.log(`   Frontend should be at http://localhost:5173\n`);
+  console.log(`\n⚔  Wings of Ruin running on http://localhost:${PORT}`);
+  console.log(`   Mode: ${process.env.NODE_ENV || "development"}\n`);
 });
